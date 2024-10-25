@@ -6,21 +6,12 @@ import org.lukas.parser.Parser;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
-import java.nio.file.Path;
 
-public class Sender {
-    private static Sender instance;
-
+public class SocketService {
     private SocketChannel socketChannel;
 
-    private Sender() {}
-
-    public Sender getInstance() {
-        if (instance == null) {
-            instance = new Sender();
-        }
-
-        return instance;
+    public SocketService(SocketChannel socketChannel) {
+        this.socketChannel = socketChannel;
     }
 
     public void setSocketChannel(SocketChannel socketChannel) {
@@ -32,7 +23,6 @@ public class Sender {
     }
 
     public void send(Message message) throws IOException {
-        // TODO: Figure out the correct size
         ByteBuffer byteBuffer = Parser.encode(message);
         byteBuffer.flip();
         socketChannel.write(byteBuffer);

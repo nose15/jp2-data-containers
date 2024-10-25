@@ -33,7 +33,23 @@ class ParserTest {
 
     @Test
     public void testParseMessageType() {
-        byte res = Parser.parseMessageType(MessageType.ERROR);
+        byte res = MessageType.ERROR.getHex();
         assertEquals(String.format("0x%08X", res), "0x00000004");
+    }
+
+    @Test
+    public void testContentDecoding() {
+        ByteBuffer encoded = Parser.encode(message);
+        Message decoded = Parser.decode(encoded);
+
+        assertEquals(decoded.getContent(), message.getContent());
+    }
+
+    @Test
+    public void testMessageTypeDecoding() {
+        ByteBuffer encoded = Parser.encode(message);
+        Message decoded = Parser.decode(encoded);
+
+        assertEquals(decoded.getMessageType(), message.getMessageType());
     }
 }

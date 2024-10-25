@@ -9,7 +9,7 @@ public class Parser {
     public static ByteBuffer encode(Message message) {
         ByteBuffer byteBuffer = ByteBuffer.allocate(message.getContentLength() + 8);
 
-        byte messageTypeByte = parseMessageType(message.getMessageType());
+        byte messageTypeByte = message.getMessageType().getHex();
 
         byteBuffer.put(0, messageTypeByte);
         byteBuffer.putInt(4, message.getContentLength());
@@ -18,27 +18,14 @@ public class Parser {
         return byteBuffer;
     }
 
-    // TODO: Think about moving it to MessageType enum so the Parser doesnt depend on messageType that much
-    public static byte parseMessageType(MessageType messageType) {
-        switch (messageType) {
-            case OK -> {
-                return (byte) 0x1;
-            }
-            case WRITE -> {
-                return (byte) 0x2;
-            }
-            case CLEAR -> {
-                return (byte) 0x3;
-            }
-            case ERROR -> {
-                return (byte) 0x4;
-            }
-            case PING -> {
-                return (byte) 0x5;
-            }
-            default -> {
-                return (byte) -0x1;
-            }
-        }
+    public static Message decode(ByteBuffer byteBuffer) {
+        MessageType messageType = MessageType.fromHex(byteBuffer.get(0));
+        int messageLength = byteBuffer.getInt(4);
+
+        byte[] contentBytes = new byte[messageLength];
+        byteBuffer.get(8, contentBytes, 0, messageLength);
+        String content = new String(contentBytes);
+
+        return new Message(messageType, content);
     }
 }

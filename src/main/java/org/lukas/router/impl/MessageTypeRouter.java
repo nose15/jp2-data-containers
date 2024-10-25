@@ -4,13 +4,20 @@ import org.lukas.dtos.Message;
 import org.lukas.enums.MessageType;
 import org.lukas.handler.Handler;
 import org.lukas.router.Router;
+import org.lukas.sender.SocketService;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
 public class MessageTypeRouter implements Router {
+    private final SocketService socketService;
     private final Map<MessageType, Handler> handlers = new HashMap<>();
+
+    public MessageTypeRouter(SocketService socketService) {
+        this.socketService = socketService;
+    }
 
     public Map<MessageType, Handler> getHandlers() {
         return this.handlers;
@@ -37,9 +44,11 @@ public class MessageTypeRouter implements Router {
         response.ifPresent(this::sendResponse);
     }
 
-    // TODO: Rethink if this is the right place, maybe it should have its own sender or something
     private void sendResponse(Message message) {
-        System.out.println("Responding with " + message.toString());
-        // TODO: ResponseService.send(message);
+        try {
+            socketService.send(message);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
