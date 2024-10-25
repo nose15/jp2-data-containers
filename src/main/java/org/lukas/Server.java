@@ -7,7 +7,7 @@ import org.lukas.handler.impl.WriteMessageHandler;
 import org.lukas.parser.Parser;
 import org.lukas.router.Router;
 import org.lukas.router.impl.MessageTypeRouter;
-import org.lukas.sender.SocketService;
+import org.lukas.socketservice.SocketService;
 
 import java.io.IOException;
 import java.net.StandardProtocolFamily;
@@ -34,6 +34,7 @@ public class Server {
                 .open(StandardProtocolFamily.UNIX);
         serverChannel.bind(address);
 
+        System.out.println("Server ready for connection on " + socketFile.toString());
         SocketChannel channel = serverChannel.accept();
 
         SocketService socketService = new SocketService(channel);
@@ -44,12 +45,13 @@ public class Server {
         router.setHandler(MessageType.ERROR, new ErrorMessageHandler());
         router.setHandler(MessageType.PING, new PingMessageHandler());
 
+        System.out.println("Server listening to messages on " + socketFile.toString());
         while (true) {
             ByteBuffer buffer = ByteBuffer.allocate(1024);
             channel.read(buffer);
-            // TODO: Parse buffer to message
             Message message = Parser.decode(buffer);
-            System.out.println(message);
+            System.out.println(message.getMessageType().name() + ": " + message.getContent());
+
             buffer.clear();
             router.dispatch(message);
 

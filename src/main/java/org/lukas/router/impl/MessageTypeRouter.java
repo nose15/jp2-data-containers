@@ -4,7 +4,7 @@ import org.lukas.dtos.Message;
 import org.lukas.enums.MessageType;
 import org.lukas.handler.Handler;
 import org.lukas.router.Router;
-import org.lukas.sender.SocketService;
+import org.lukas.socketservice.SocketService;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -46,6 +46,7 @@ public class MessageTypeRouter implements Router {
 
     private void sendResponse(Message message) {
         try {
+            System.out.println("Sending: " + message.getMessageType().name());
             socketService.send(message);
         } catch (IOException e) {
             throw new RuntimeException(e);

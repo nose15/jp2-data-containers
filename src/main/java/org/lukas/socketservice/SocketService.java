@@ -1,4 +1,4 @@
-package org.lukas.sender;
+package org.lukas.socketservice;
 
 import org.lukas.dtos.Message;
 import org.lukas.parser.Parser;
@@ -24,7 +24,7 @@ public class SocketService {
 
     public void send(Message message) throws IOException {
         ByteBuffer byteBuffer = Parser.encode(message);
-        byteBuffer.flip();
         socketChannel.write(byteBuffer);
+        byteBuffer.clear();
     }
 }

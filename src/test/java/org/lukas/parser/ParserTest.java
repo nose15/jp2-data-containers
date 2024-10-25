@@ -38,7 +38,7 @@ class ParserTest {
     }
 
     @Test
-    public void testContentDecoding() {
+    public void testContentEncodingDecoding() {
         ByteBuffer encoded = Parser.encode(message);
         Message decoded = Parser.decode(encoded);
 
@@ -46,7 +46,7 @@ class ParserTest {
     }
 
     @Test
-    public void testMessageTypeDecoding() {
+    public void testMessageTypeEncodingDecoding() {
         ByteBuffer encoded = Parser.encode(message);
         Message decoded = Parser.decode(encoded);
 
