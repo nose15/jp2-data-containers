@@ -6,23 +6,20 @@ import org.lukas.enums.MessageType;
 import java.nio.ByteBuffer;
 
 public class Parser {
-    public static byte[] encode(Message message) {
-        int size = message.getContentLength() + 8;
-        byte[] bytes = new byte[size];
+    public static ByteBuffer encode(Message message) {
+        ByteBuffer byteBuffer = ByteBuffer.allocate(message.getContentLength() + 8);
 
         byte messageTypeByte = parseMessageType(message.getMessageType());
-        byte[] contentLengthBytes = ByteBuffer.allocate(4).putInt(message.getContentLength()).array();
-        byte[] contentBytes = message.getContent().getBytes();
 
-        bytes[0] = messageTypeByte;
-        System.arraycopy(contentLengthBytes, 0, bytes, 4, contentLengthBytes.length);
-        System.arraycopy(contentBytes, 0, bytes, 8, contentBytes.length);
+        byteBuffer.put(0, messageTypeByte);
+        byteBuffer.putInt(4, message.getContentLength());
+        byteBuffer.put(8, message.getContent().getBytes());
 
-        return bytes;
+        return byteBuffer;
     }
 
     // TODO: Think about moving it to MessageType enum so the Parser doesnt depend on messageType that much
-    private static byte parseMessageType(MessageType messageType) {
+    public static byte parseMessageType(MessageType messageType) {
         switch (messageType) {
             case OK -> {
                 return (byte) 0x1;

@@ -33,10 +33,7 @@ public class Sender {
 
     public void send(Message message) throws IOException {
         // TODO: Figure out the correct size
-        ByteBuffer byteBuffer = ByteBuffer.allocate(1024);
-
-        byte[] encodedMessage = Parser.encode(message);
-        byteBuffer.put(encodedMessage);
+        ByteBuffer byteBuffer = Parser.encode(message);
         byteBuffer.flip();
         socketChannel.write(byteBuffer);
     }
