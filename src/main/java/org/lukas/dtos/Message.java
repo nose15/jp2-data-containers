@@ -2,6 +2,7 @@ package org.lukas.dtos;
 
 import org.lukas.enums.MessageType;
 
+// TODO: Override toString
 public class Message {
     static final int MAX_SIZE = Integer.MAX_VALUE; // TODO: Ogarnąć max size, bo nie da sie zrobic unsigned
 
