@@ -21,6 +21,11 @@ public class Parser {
 
     public static Message decode(ByteBuffer byteBuffer) {
         MessageType messageType = MessageType.fromHex(byteBuffer.get(0));
+
+        if (messageType == MessageType.UNKNOWN) {
+            return new Message(messageType, "");
+        }
+
         int messageLength = byteBuffer.getInt(4);
 
         byte[] contentBytes = new byte[messageLength];

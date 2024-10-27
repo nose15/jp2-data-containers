@@ -8,7 +8,7 @@ import java.util.Optional;
 
 // This class handles the whole message lifecycle
 public interface Router {
-    void dispatch(Message message);
+    Optional<Message> dispatch(Message message);
     void setHandler(MessageType messageType, Handler handler);
     void removeHandler(MessageType messageType);
 }

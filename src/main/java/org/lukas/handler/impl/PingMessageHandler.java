@@ -1,4 +1,4 @@
-package org.lukas;
+package org.lukas.handler.impl;
 
 import org.lukas.dtos.Message;
 import org.lukas.handler.Handler;

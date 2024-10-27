@@ -5,7 +5,8 @@ public enum MessageType {
     WRITE((byte) 0x2),
     CLEAR((byte) 0x3),
     ERROR((byte) 0x4),
-    PING((byte) 0x5);
+    PING((byte) 0x5),
+    UNKNOWN((byte) -0x1);
 
     private final byte hex;
 
@@ -23,6 +24,6 @@ public enum MessageType {
                 return messageType;
             }
         }
-        throw new IllegalArgumentException("No value with specified hexadecimal code");
+        return UNKNOWN;
     }
 }
