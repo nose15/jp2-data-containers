@@ -97,6 +97,7 @@ public class Server {
     private static void registerClient(Selector selector, ServerSocketChannel serverSocketChannel)
             throws IOException {
 
+        System.out.println("Registered client");
         SocketChannel client = serverSocketChannel.accept();
         client.configureBlocking(false);
         client.register(selector, SelectionKey.OP_READ);
