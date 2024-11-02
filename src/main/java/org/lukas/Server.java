@@ -35,7 +35,7 @@ public class Server {
         Router router = new MessageTypeRouter();
         router.setHandler(MessageType.OK, new OkMessageHandler());
         router.setHandler(MessageType.WRITE, new WriteMessageHandler(fileManager));
-        router.setHandler(MessageType.CLEAR, new ClearMessageHandler());
+        router.setHandler(MessageType.CLEAR, new ClearMessageHandler(fileManager));
         router.setHandler(MessageType.ERROR, new ErrorMessageHandler());
         router.setHandler(MessageType.PING, new PingMessageHandler());
 
