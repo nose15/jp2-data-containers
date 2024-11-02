@@ -9,7 +9,11 @@ import java.util.Optional;
 public class OkMessageHandler implements Handler {
     @Override
     public Optional<Message> handle(Message message) {
-        return Optional.of(new Message(MessageType.OK, "Pozdro z serwera"));
+        if (message.getContentLength() != 0) {
+            return Optional.of(new Message(MessageType.ERROR, "Content length must be 0"));
+        }
+
+        return Optional.empty();
     }
 }
 

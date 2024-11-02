@@ -2,12 +2,16 @@ package org.lukas;
 
 import org.lukas.dtos.Message;
 import org.lukas.enums.MessageType;
+import org.lukas.filemanager.FileManager;
 import org.lukas.handler.impl.*;
 import org.lukas.parser.Parser;
 import org.lukas.router.Router;
 import org.lukas.router.impl.MessageTypeRouter;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.net.SocketException;
 import java.net.StandardProtocolFamily;
 import java.net.UnixDomainSocketAddress;
 import java.nio.ByteBuffer;
@@ -26,9 +30,11 @@ public class Server {
                 .resolve("helloworld.socket");
         Files.deleteIfExists(socketFile);
 
+        FileManager fileManager = new FileManager("/home/lukasz/test");
+
         Router router = new MessageTypeRouter();
         router.setHandler(MessageType.OK, new OkMessageHandler());
-        router.setHandler(MessageType.WRITE, new WriteMessageHandler());
+        router.setHandler(MessageType.WRITE, new WriteMessageHandler(fileManager));
         router.setHandler(MessageType.CLEAR, new ClearMessageHandler());
         router.setHandler(MessageType.ERROR, new ErrorMessageHandler());
         router.setHandler(MessageType.PING, new PingMessageHandler());
@@ -54,10 +60,14 @@ public class Server {
                     registerClient(selector, serverSocketChannel);
                 } else if (key.isReadable()) {
                     SocketChannel clientChannel = (SocketChannel) key.channel();
-                    Message message = readMessage(clientChannel, buffer);
-                    Optional<Message> response = router.dispatch(message);
-                    if (response.isPresent()) {
-                        sendResponse(clientChannel, response.get(), buffer);
+                    try {
+                        processMessage(router, clientChannel, buffer);
+                    } catch (SocketException e) {
+                        if (clientChannel.isOpen()) {
+                            clientChannel.close();
+                        } else {
+                            System.out.println("Suddenly closed connection with " + clientChannel.getLocalAddress());
+                        }
                     }
                 }
             }
@@ -67,12 +77,21 @@ public class Server {
         }
     }
 
-    private static Message readMessage(SocketChannel clientChannel, ByteBuffer temp) throws IOException {
-        clientChannel.read(temp);
-        Message message = Parser.decode(temp);
-        temp.clear();
+    private static void processMessage(Router router, SocketChannel clientChannel, ByteBuffer buffer) throws IOException {
+        int bytesRead = clientChannel.read(buffer);
+        if (bytesRead <= 0 || new String(buffer.array()).trim().equals("POISON_PILL")) {
+            clientChannel.close();
+            System.out.println("Closed connection with " + clientChannel.getLocalAddress());
+            return;
+        }
 
-        return message;
+        Message message = Parser.decode(buffer);
+        buffer.clear();
+
+        Optional<Message> response = router.dispatch(message);
+        if (response.isPresent()) {
+            sendResponse(clientChannel, response.get(), buffer);
+        }
     }
 
     private static void registerClient(Selector selector, ServerSocketChannel serverSocketChannel)
@@ -82,7 +101,6 @@ public class Server {
         client.configureBlocking(false);
         client.register(selector, SelectionKey.OP_READ);
     }
-
 
     private static void sendResponse(SocketChannel clientChannel, Message message, ByteBuffer buffer) throws IOException {
         buffer.put(Parser.encode(message));
