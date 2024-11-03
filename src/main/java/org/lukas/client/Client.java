@@ -20,7 +20,7 @@ public class Client {
             throws IOException, InterruptedException {
         Path socketFile = Path
                 .of(System.getProperty("user.home"))
-                .resolve("helloworld.socket");
+                .resolve("hello.socket");
         UnixDomainSocketAddress address =
                 UnixDomainSocketAddress.of(socketFile);
 
