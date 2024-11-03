@@ -1,4 +1,4 @@
-package org.lukas.filemanager;
+package org.lukas.server.filemanager;
 
 import java.io.*;
 import java.nio.file.Path;

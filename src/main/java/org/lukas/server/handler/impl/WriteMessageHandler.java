@@ -1,9 +1,9 @@
-package org.lukas.handler.impl;
+package org.lukas.server.handler.impl;
 
-import org.lukas.dtos.Message;
-import org.lukas.enums.MessageType;
-import org.lukas.filemanager.FileManager;
-import org.lukas.handler.Handler;
+import org.lukas.server.Message;
+import org.lukas.server.MessageType;
+import org.lukas.server.filemanager.FileManager;
+import org.lukas.server.handler.Handler;
 
 import java.io.IOException;
 import java.util.Optional;

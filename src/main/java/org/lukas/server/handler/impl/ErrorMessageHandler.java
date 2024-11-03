@@ -1,7 +1,7 @@
-package org.lukas.handler.impl;
+package org.lukas.server.handler.impl;
 
-import org.lukas.dtos.Message;
-import org.lukas.handler.Handler;
+import org.lukas.server.Message;
+import org.lukas.server.handler.Handler;
 
 import java.util.Optional;
 

@@ -2,8 +2,8 @@ package org.lukas.parser;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.lukas.dtos.Message;
-import org.lukas.enums.MessageType;
+import org.lukas.server.Message;
+import org.lukas.server.MessageType;
 
 import java.nio.ByteBuffer;
 

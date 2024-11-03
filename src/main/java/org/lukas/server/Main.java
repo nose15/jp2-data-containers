@@ -1,4 +1,4 @@
-package org.lukas;
+package org.lukas.server;
 
 import java.io.IOException;
 import java.nio.file.Path;

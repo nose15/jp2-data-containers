@@ -1,4 +1,4 @@
-package org.lukas.enums;
+package org.lukas.server;
 
 public enum MessageType {
     OK((byte) 0x1),

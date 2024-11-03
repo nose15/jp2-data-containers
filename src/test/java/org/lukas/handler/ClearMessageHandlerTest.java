@@ -2,10 +2,10 @@ package org.lukas.handler;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.lukas.dtos.Message;
-import org.lukas.enums.MessageType;
-import org.lukas.filemanager.FileManager;
-import org.lukas.handler.impl.ClearMessageHandler;
+import org.lukas.server.Message;
+import org.lukas.server.MessageType;
+import org.lukas.server.filemanager.FileManager;
+import org.lukas.server.handler.impl.ClearMessageHandler;
 
 import java.io.File;
 import java.io.FileNotFoundException;

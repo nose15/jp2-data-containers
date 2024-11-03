@@ -1,10 +1,9 @@
 package org.lukas.handler;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.lukas.dtos.Message;
-import org.lukas.enums.MessageType;
-import org.lukas.handler.impl.OkMessageHandler;
+import org.lukas.server.Message;
+import org.lukas.server.MessageType;
+import org.lukas.server.handler.impl.OkMessageHandler;
 
 import java.util.Optional;
 

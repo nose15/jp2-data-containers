@@ -1,12 +1,10 @@
-package org.lukas;
+package org.lukas.server;
 
-import org.lukas.dtos.Message;
-import org.lukas.enums.MessageType;
-import org.lukas.filemanager.FileManager;
-import org.lukas.handler.impl.*;
+import org.lukas.server.filemanager.FileManager;
+import org.lukas.server.handler.impl.*;
 import org.lukas.parser.Parser;
-import org.lukas.router.Router;
-import org.lukas.router.impl.MessageTypeRouter;
+import org.lukas.server.router.Router;
+import org.lukas.server.router.impl.MessageTypeRouter;
 
 import java.io.IOException;
 import java.net.SocketException;

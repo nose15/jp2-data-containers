@@ -1,6 +1,4 @@
-package org.lukas.dtos;
-
-import org.lukas.enums.MessageType;
+package org.lukas.server;
 
 // TODO: Override toString
 public class Message {

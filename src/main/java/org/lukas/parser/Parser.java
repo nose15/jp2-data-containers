@@ -1,10 +1,9 @@
 package org.lukas.parser;
 
-import org.lukas.dtos.Message;
-import org.lukas.enums.MessageType;
+import org.lukas.server.Message;
+import org.lukas.server.MessageType;
 
 import java.nio.ByteBuffer;
-import java.util.Arrays;
 
 public class Parser {
     public static ByteBuffer encode(Message message) {

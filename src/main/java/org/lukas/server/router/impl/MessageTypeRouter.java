@@ -1,10 +1,10 @@
-package org.lukas.router.impl;
+package org.lukas.server.router.impl;
 
-import org.lukas.dtos.Message;
-import org.lukas.enums.MessageType;
-import org.lukas.handler.Handler;
-import org.lukas.handler.impl.DefaultHandler;
-import org.lukas.router.Router;
+import org.lukas.server.Message;
+import org.lukas.server.MessageType;
+import org.lukas.server.handler.Handler;
+import org.lukas.server.handler.impl.DefaultHandler;
+import org.lukas.server.router.Router;
 
 import java.util.HashMap;
 import java.util.Map;

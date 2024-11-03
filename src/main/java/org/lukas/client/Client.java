@@ -1,23 +1,19 @@
-package org.lukas;
+package org.lukas.client;
 
-import org.lukas.dtos.Message;
-import org.lukas.enums.MessageType;
 import org.lukas.parser.Parser;
+import org.lukas.server.Message;
+import org.lukas.server.MessageType;
 
 import java.io.IOException;
 import java.net.StandardProtocolFamily;
 import java.net.UnixDomainSocketAddress;
 import java.nio.ByteBuffer;
-import java.nio.channels.SelectableChannel;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
 import java.nio.file.Path;
 import java.util.Iterator;
 import java.util.Set;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 public class Client {
     public static void main(String[] args)
