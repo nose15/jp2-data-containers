@@ -8,8 +8,6 @@ import org.lukas.parser.Parser;
 import org.lukas.router.Router;
 import org.lukas.router.impl.MessageTypeRouter;
 
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.net.SocketException;
 import java.net.StandardProtocolFamily;
@@ -23,30 +21,32 @@ import java.util.Optional;
 import java.util.Set;
 
 public class Server {
-    public static void main(String[] args)
-            throws IOException, InterruptedException {
-        Path socketFile = Path
-                .of(System.getProperty("user.home"))
-                .resolve("helloworld.socket");
+    private final Selector selector;
+    private final ServerSocketChannel serverSocketChannel;
+    private final Router router;
+
+    public Server(Path socketFile, Path filePath) throws IOException {
         Files.deleteIfExists(socketFile);
+        FileManager fileManager = new FileManager(filePath);
 
-        FileManager fileManager = new FileManager("/home/lukasz/test");
-
-        Router router = new MessageTypeRouter();
+        router = new MessageTypeRouter();
         router.setHandler(MessageType.OK, new OkMessageHandler());
         router.setHandler(MessageType.WRITE, new WriteMessageHandler(fileManager));
         router.setHandler(MessageType.CLEAR, new ClearMessageHandler(fileManager));
         router.setHandler(MessageType.ERROR, new ErrorMessageHandler());
         router.setHandler(MessageType.PING, new PingMessageHandler());
 
-        Selector selector = Selector.open();
-        ServerSocketChannel serverSocketChannel = ServerSocketChannel.open(StandardProtocolFamily.UNIX);
+        selector = Selector.open();
+        serverSocketChannel = ServerSocketChannel.open(StandardProtocolFamily.UNIX);
         serverSocketChannel.bind(UnixDomainSocketAddress.of(socketFile));
         serverSocketChannel.configureBlocking(false);
         serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
-        ByteBuffer buffer = ByteBuffer.allocate(1024);
 
-        System.out.println("Server listening to messages on " + socketFile.toString());
+    }
+
+    public void run() throws IOException, InterruptedException {
+        System.out.println("Server listening to messages");
+        ByteBuffer buffer = ByteBuffer.allocate(1024);
 
         while (true) {
             selector.select();
@@ -57,11 +57,12 @@ public class Server {
                 SelectionKey key = iterator.next();
 
                 if(key.isAcceptable()) {
-                    registerClient(selector, serverSocketChannel);
+                    registerClient(serverSocketChannel);
                 } else if (key.isReadable()) {
                     SocketChannel clientChannel = (SocketChannel) key.channel();
                     try {
-                        processMessage(router, clientChannel, buffer);
+
+                        processMessage(clientChannel, buffer);
                     } catch (SocketException e) {
                         if (clientChannel.isOpen()) {
                             clientChannel.close();
@@ -77,7 +78,7 @@ public class Server {
         }
     }
 
-    private static void processMessage(Router router, SocketChannel clientChannel, ByteBuffer buffer) throws IOException {
+    private void processMessage(SocketChannel clientChannel, ByteBuffer buffer) throws IOException {
         int bytesRead = clientChannel.read(buffer);
         if (bytesRead <= 0 || new String(buffer.array()).trim().equals("POISON_PILL")) {
             clientChannel.close();
@@ -94,11 +95,11 @@ public class Server {
         }
     }
 
-    private static void registerClient(Selector selector, ServerSocketChannel serverSocketChannel)
+    private void registerClient(ServerSocketChannel clientChannel)
             throws IOException {
 
         System.out.println("Registered client");
-        SocketChannel client = serverSocketChannel.accept();
+        SocketChannel client = clientChannel.accept();
         client.configureBlocking(false);
         client.register(selector, SelectionKey.OP_READ);
     }

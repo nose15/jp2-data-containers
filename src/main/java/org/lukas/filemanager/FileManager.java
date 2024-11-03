@@ -1,6 +1,7 @@
 package org.lukas.filemanager;
 
 import java.io.*;
+import java.nio.file.Path;
 
 public class FileManager {
     private PrintWriter printWriter;
@@ -11,8 +12,8 @@ public class FileManager {
         printWriter = new PrintWriter(file);
     }
 
-    public FileManager(String filePath) throws IOException {
-        this.file = new File(filePath);
+    public FileManager(Path filePath) throws IOException {
+        this.file = new File(String.valueOf(filePath));
         printWriter = new PrintWriter(file);
     }
 

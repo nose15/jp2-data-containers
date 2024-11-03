@@ -65,6 +65,7 @@ public class Client {
                     }
                 }
 
+                iterator.remove();
                 Thread.sleep(100);
             }
         }
