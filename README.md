@@ -5,7 +5,7 @@ git clone git@github.com:nose15/uds-server.git
 ```
 or if you're using https
 ```
-git clone [git@github.com:nose15/uds-server.git](https://github.com/nose15/uds-server.git)
+git clone https://github.com/nose15/uds-server.git
 ```
 
 # Build
