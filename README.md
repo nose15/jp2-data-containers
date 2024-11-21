@@ -18,7 +18,7 @@ mvnw clean install
 After building the project, in order to launch the server, run:
 ```
 cd target
-java -cp uds-helloworld-1.0-SNAPSHOT.jar org.lukas.server.Main -f <file_name> -s <uds_address>
+java -cp uds-helloworld-1.0-SNAPSHOT.jar org.lukas.Main -f <file_name> -s <uds_address>
 ```
 The file_name property is a path to the file on which we want the server to perform the operations.
 The uds_address property is an address of Unix Domain Socket at which the server is going to listen to incoming messages. 

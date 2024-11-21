@@ -1,16 +1,16 @@
 package org.lukas.server.router.impl;
 
-import org.lukas.server.Message;
-import org.lukas.server.MessageType;
 import org.lukas.server.handler.Handler;
 import org.lukas.server.handler.impl.DefaultHandler;
+import org.lukas.server.message.Message;
+import org.lukas.server.message.MessageType;
 import org.lukas.server.router.Router;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-public class MessageTypeRouter implements Router {
+public class MessageTypeRouter implements Router<MessageType> {
     private final Handler defaultHandler;
     private final Map<MessageType, Handler> handlers = new HashMap<>();
 

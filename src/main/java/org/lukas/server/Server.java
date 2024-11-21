@@ -1,10 +1,10 @@
 package org.lukas.server;
 
-import org.lukas.server.filemanager.FileManager;
-import org.lukas.server.handler.impl.*;
-import org.lukas.parser.Parser;
-import org.lukas.server.router.Router;
+import org.apache.commons.cli.*;
+import org.lukas.server.message.MessageParser;
+import org.lukas.server.message.Message;
 import org.lukas.server.router.impl.MessageTypeRouter;
+import org.lukas.server.router.Router;
 
 import java.io.IOException;
 import java.net.SocketException;
@@ -21,25 +21,21 @@ import java.util.Set;
 public class Server {
     private final Selector selector;
     private final ServerSocketChannel serverSocketChannel;
-    private final Router router;
+    private Router<?> router;
 
-    public Server(Path socketFile, Path filePath) throws IOException {
+    public Server(Path socketFile) throws IOException {
         Files.deleteIfExists(socketFile);
-        FileManager fileManager = new FileManager(filePath);
-
         router = new MessageTypeRouter();
-        router.setHandler(MessageType.OK, new OkMessageHandler());
-        router.setHandler(MessageType.WRITE, new WriteMessageHandler(fileManager));
-        router.setHandler(MessageType.CLEAR, new ClearMessageHandler(fileManager));
-        router.setHandler(MessageType.ERROR, new ErrorMessageHandler());
-        router.setHandler(MessageType.PING, new PingMessageHandler());
 
         selector = Selector.open();
         serverSocketChannel = ServerSocketChannel.open(StandardProtocolFamily.UNIX);
         serverSocketChannel.bind(UnixDomainSocketAddress.of(socketFile));
         serverSocketChannel.configureBlocking(false);
         serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
+    }
 
+    public void setRouter(Router<?> router) {
+        this.router = router;
     }
 
     public void run() throws IOException, InterruptedException {
@@ -84,7 +80,7 @@ public class Server {
             return;
         }
 
-        Message message = Parser.decode(buffer);
+        Message message = MessageParser.decode(buffer);
         buffer.clear();
 
         Optional<Message> response = router.dispatch(message);
@@ -103,7 +99,7 @@ public class Server {
     }
 
     private static void sendResponse(SocketChannel clientChannel, Message message, ByteBuffer buffer) throws IOException {
-        buffer.put(Parser.encode(message));
+        buffer.put(MessageParser.encode(message));
         buffer.flip();
         clientChannel.write(buffer);
         buffer.clear();

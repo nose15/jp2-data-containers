@@ -1,11 +1,12 @@
-package org.lukas.server;
+package org.lukas.server.message;
 
 public enum MessageType {
     OK((byte) 0x1),
-    WRITE((byte) 0x2),
-    CLEAR((byte) 0x3),
-    ERROR((byte) 0x4),
-    PING((byte) 0x5),
+    ERROR((byte) 0x2),
+    ADD((byte) 0x3),
+    GET_ALL((byte) 0x4),
+    GET_ONE((byte) 0x5),
+    FIND((byte) 0x6),
     UNKNOWN((byte) -0x1);
 
     private final byte hex;

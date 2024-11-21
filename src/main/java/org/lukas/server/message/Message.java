@@ -1,4 +1,4 @@
-package org.lukas.server;
+package org.lukas.server.message;
 
 // TODO: Override toString
 public class Message {
@@ -30,6 +30,11 @@ public class Message {
 
     public void setMessageType(MessageType messageType) {
         this.messageType = messageType;
+    }
+
+    public Message(MessageType messageType) {
+        this.messageType = messageType;
+        this.content = "";
     }
 
     public Message(MessageType messageType, String content) {

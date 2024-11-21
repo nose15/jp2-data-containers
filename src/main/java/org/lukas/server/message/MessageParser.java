@@ -1,11 +1,11 @@
-package org.lukas.parser;
+package org.lukas.server.message;
 
-import org.lukas.server.Message;
-import org.lukas.server.MessageType;
+import org.apache.commons.cli.*;
 
 import java.nio.ByteBuffer;
+import java.nio.file.Path;
 
-public class Parser {
+public class MessageParser {
     public static ByteBuffer encode(Message message) {
         ByteBuffer byteBuffer = ByteBuffer.allocate(message.getContentLength() + 8);
 
