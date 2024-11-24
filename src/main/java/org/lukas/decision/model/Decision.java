@@ -1,6 +1,7 @@
-package org.lukas.decision;
+package org.lukas.decision.model;
 
 import org.json.JSONObject;
+import org.lukas.decision.serializers.DecisionJsonDecoder;
 
 import java.text.ParseException;
 import java.util.Date;
@@ -34,11 +35,11 @@ public class Decision {
         Decision decision = new Decision();
         JSONObject jsonObject = new JSONObject(jsonString);
 
-        decision.date = DecisionParser.parseDate(jsonObject);
-        decision.component = DecisionParser.parseComponent(jsonObject);
-        decision.importance = DecisionParser.parseImportance(jsonObject);
-        decision.person = DecisionParser.parsePersonId(jsonObject);
-        decision.description = DecisionParser.parseDescription(jsonObject);
+        decision.date = DecisionJsonDecoder.parseDate(jsonObject);
+        decision.component = DecisionJsonDecoder.parseComponent(jsonObject);
+        decision.importance = DecisionJsonDecoder.parseImportance(jsonObject);
+        decision.person = DecisionJsonDecoder.parsePersonId(jsonObject);
+        decision.description = DecisionJsonDecoder.parseDescription(jsonObject);
 
         return decision;
     }

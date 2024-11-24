@@ -1,6 +1,6 @@
 package org.lukas.server.router;
 
-import org.lukas.server.message.Message;
+import org.lukas.message.model.Message;
 import org.lukas.server.handler.Handler;
 
 import java.util.Optional;

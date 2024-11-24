@@ -1,9 +1,8 @@
 package org.lukas.server;
 
-import org.apache.commons.cli.*;
-import org.lukas.server.message.MessageParser;
-import org.lukas.server.message.Message;
-import org.lukas.server.router.impl.MessageTypeRouter;
+import org.lukas.message.serializers.MessageParser;
+import org.lukas.message.model.Message;
+import org.lukas.message.router.MessageTypeRouter;
 import org.lukas.server.router.Router;
 
 import java.io.IOException;

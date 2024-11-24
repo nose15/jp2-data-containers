@@ -1,9 +1,9 @@
-package org.lukas.server.message;
+package org.lukas.message.serializers;
 
-import org.apache.commons.cli.*;
+import org.lukas.message.model.Message;
+import org.lukas.message.model.MessageType;
 
 import java.nio.ByteBuffer;
-import java.nio.file.Path;
 
 public class MessageParser {
     public static ByteBuffer encode(Message message) {

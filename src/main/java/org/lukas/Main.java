@@ -2,16 +2,18 @@ package org.lukas;
 
 import org.apache.commons.cli.*;
 import org.lukas.server.Server;
-import org.lukas.server.handler.impl.AddHandler;
-import org.lukas.server.handler.impl.FindHandler;
-import org.lukas.server.handler.impl.GetAllHandler;
-import org.lukas.server.handler.impl.GetOneHandler;
-import org.lukas.server.message.MessageType;
+import org.lukas.message.handler.AddHandler;
+import org.lukas.message.handler.FindHandler;
+import org.lukas.message.handler.GetAllHandler;
+import org.lukas.message.handler.GetOneHandler;
+import org.lukas.message.model.MessageType;
+import org.lukas.server.db.DbManager;
 import org.lukas.server.router.Router;
-import org.lukas.server.router.impl.MessageTypeRouter;
+import org.lukas.message.router.MessageTypeRouter;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.sql.SQLException;
 
 public class Main {
     public static void main(String[] args) throws IOException, InterruptedException {
@@ -37,6 +39,7 @@ public class Main {
 
     private static Path parseSocketPath(String[] args) {
         Options options = new Options();
+        options.addOption("s", "socket", true, "siema");
 
         CommandLineParser commandLineParser = new DefaultParser();
         CommandLine cmd = null;
@@ -44,7 +47,7 @@ public class Main {
         try {
             cmd = commandLineParser.parse(options, args);
         } catch (ParseException e) {
-            System.out.println("Error while parsing arguments");
+            System.out.println("Error while parsing arguments: " + e);
             System.exit(1);
         }
 

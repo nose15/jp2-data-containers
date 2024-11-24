@@ -1,4 +1,4 @@
-package org.lukas.decision;
+package org.lukas.decision.model;
 
 import java.text.ParseException;
 

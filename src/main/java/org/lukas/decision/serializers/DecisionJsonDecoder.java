@@ -1,6 +1,7 @@
-package org.lukas.decision;
+package org.lukas.decision.serializers;
 
 import org.json.JSONObject;
+import org.lukas.decision.model.Importance;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -9,7 +10,7 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class DecisionParser {
+public class DecisionJsonDecoder {
     public static Date parseDate(JSONObject decisionJson) throws ParseException {
         String dateString = decisionJson.getString("date");
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");

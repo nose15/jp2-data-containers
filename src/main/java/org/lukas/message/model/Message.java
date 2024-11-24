@@ -1,4 +1,4 @@
-package org.lukas.server.message;
+package org.lukas.message.model;
 
 // TODO: Override toString
 public class Message {
