@@ -1,9 +1,6 @@
 package org.lukas.server.db;
 
-import org.lukas.decision.model.Importance;
-
 import java.sql.*;
-import java.util.Date;
 
 public class DbManager {
     private final String jdbcUrl = "jdbc:h2:./data/proddb";

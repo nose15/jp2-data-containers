@@ -21,14 +21,14 @@ public class DecisionJsonDecoder {
         String componentStr = decisionJson.getString("componentStr");
         componentStr = componentStr.trim();
         componentStr = componentStr.strip();
-        Pattern pattern = Pattern.compile("^[a-zA-Z0-9]*$");
+        Pattern pattern = Pattern.compile("^[a-zA-Z0-9 ]*$");
         Matcher matcher = pattern.matcher(componentStr);
 
         if (matcher.matches()) {
             return componentStr;
         }
 
-        throw new ParseException("Wrong data format - component should only contain letters a-Z and numbers 0-9", 0);
+        throw new ParseException("Component should only contain letters a-Z and numbers 0-9", 0);
     }
 
     public static String parsePersonId(JSONObject decisionJson) throws ParseException {
@@ -42,7 +42,7 @@ public class DecisionJsonDecoder {
             return personIdStr;
         }
 
-        throw new ParseException("Wrong data format - personId should only contain letters a-Z and numbers 0-9", 0);
+        throw new ParseException("Person should only contain letters a-Z and numbers 0-9", 0);
     }
 
     public static Importance parseImportance(JSONObject decisionJson) throws ParseException {

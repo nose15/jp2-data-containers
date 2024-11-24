@@ -1,5 +1,6 @@
 package org.lukas.message.handler;
 
+import org.json.JSONException;
 import org.lukas.decision.model.Decision;
 import org.lukas.decision.service.DecisionService;
 import org.lukas.server.handler.Handler;
@@ -19,9 +20,9 @@ public class AddHandler implements Handler {
             decisionService.add(decision);
             return Optional.of(new Message(MessageType.OK));
         } catch (ParseException e) {
+            return Optional.of(new Message(MessageType.ERROR, "Wrong data format: " + e.getMessage()));
+        } catch (JSONException e) {
             return Optional.of(new Message(MessageType.ERROR, "Wrong JSON format: " + e.getMessage()));
-        } catch (IllegalArgumentException e) {
-            return Optional.of(new Message(MessageType.ERROR, "Wrong data: " + e.getMessage()));
         }
     }
 }

@@ -10,8 +10,11 @@ import org.lukas.server.handler.Handler;
 import org.lukas.message.model.Message;
 import org.lukas.message.model.MessageType;
 
+import java.text.ParseException;
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class FindHandler implements Handler {
     private final DecisionService decisionService = new DecisionService();
@@ -25,11 +28,31 @@ public class FindHandler implements Handler {
             return Optional.of(new Message(MessageType.OK, decisionsJson.toString()));
         } catch (JSONException e) {
             return Optional.of(new Message(MessageType.ERROR, "Wrong JSON format: " + e.getMessage()));
+        } catch (ParseException e) {
+            return Optional.of(new Message(MessageType.ERROR, "Wrong data format: " + e.getMessage()));
         }
     }
 
-    private JSONObject parseQuery(String content) {
-        // TODO: JSON Parsing
-        return new JSONObject(content);
+    private JSONObject parseQuery(String content) throws ParseException {
+        Pattern fieldPattern = Pattern.compile("^[a-z]*$");
+        Pattern keywordPattern = Pattern.compile("^[a-zA-Z0-9 ]*$");
+
+        JSONObject json = new JSONObject(content);
+        String field = json.getString("field");
+        String keyword = json.getString("keyword");
+
+        Matcher fieldMatcher = fieldPattern.matcher(field);
+        Matcher keywordMatcher = keywordPattern.matcher(keyword);
+
+
+        if (!fieldMatcher.matches()) {
+            throw new ParseException("Field should only contain letters a-z", 0);
+        }
+
+        if (!keywordMatcher.matches()) {
+            throw new ParseException("Keyword should only contain letters a-Z and numbers 0-9", 0);
+        }
+
+        return json;
     }
 }
