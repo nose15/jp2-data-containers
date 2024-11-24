@@ -48,6 +48,16 @@ public class DbManager {
         }
     }
 
+    public void resetAutoIncrement() {
+        try {
+            String query = "ALTER TABLE Decisions ALTER COLUMN ID RESTART WITH 1";
+            PreparedStatement statement = this.connection.prepareStatement(query);
+            statement.execute();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public boolean columnExists(String colName) throws SQLException {
         String query = "SHOW columns FROM Decisions";
         PreparedStatement preparedStatement = this.connection.prepareStatement(query);
@@ -88,7 +98,7 @@ public class DbManager {
             }
 
             String initQuery = "CREATE TABLE Decisions(" +
-                    "id int, " +
+                    "id bigint auto_increment, " +
                     "component varchar(255), " +
                     "added_on date, " +
                     "description varchar(511), " +

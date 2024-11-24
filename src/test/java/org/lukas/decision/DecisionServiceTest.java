@@ -28,15 +28,12 @@ public class DecisionServiceTest {
     @AfterEach
     public void afterEach() throws SQLException {
         dbManager.truncateTables();
-        ResultSet results = dbManager.getConnection().prepareStatement("SELECT * FROM Decisions").executeQuery();
-        if (results.next()) {
-            System.out.println(results.getString("component"));
-        }
+        dbManager.resetAutoIncrement();
     }
 
     @Test
     public void testGetById() throws SQLException {
-        PreparedStatement preparedStatement = dbManager.getConnection().prepareStatement("INSERT INTO Decisions(id, component, added_on, user_name, importance, description) VALUES (1, 'dupy', parsedatetime('2022-12-12','yyyy-MM-dd'), 'Grzybiarz', 'MINOR', 'SIEMA ENIU')");
+        PreparedStatement preparedStatement = dbManager.getConnection().prepareStatement("INSERT INTO Decisions(component, added_on, user_name, importance, description) VALUES ('dupy', parsedatetime('2022-12-12','yyyy-MM-dd'), 'Grzybiarz', 'MINOR', 'siemanosiemano')");
         preparedStatement.execute();
         DecisionService decisionService = new DecisionService(dbManager);
         Optional<Decision> decision = decisionService.getById(1);
@@ -46,9 +43,9 @@ public class DecisionServiceTest {
 
     @Test
     public void testGetAll() throws SQLException {
-        dbManager.getConnection().prepareStatement("INSERT INTO Decisions(id, component, added_on, user_name, importance, description) VALUES (1, 'dupy', parsedatetime('2022-12-12','yyyy-MM-dd'), 'Grzybiarz', 'MINOR', 'siemanosiemano')").execute();
-        dbManager.getConnection().prepareStatement("INSERT INTO Decisions(id, component, added_on, user_name, importance, description) VALUES (2, 'cipy', parsedatetime('2022-12-12','yyyy-MM-dd'), 'Janush', 'MAJOR', 'dzwonipapagei')").execute();
-        dbManager.getConnection().prepareStatement("INSERT INTO Decisions(id, component, added_on, user_name, importance, description) VALUES (3, 'japy', parsedatetime('2022-12-12','yyyy-MM-dd'), 'Elo', 'CRITICAL', 'SIEMA ENIU')").execute();
+        dbManager.getConnection().prepareStatement("INSERT INTO Decisions(component, added_on, user_name, importance, description) VALUES ('dupy', parsedatetime('2022-12-12','yyyy-MM-dd'), 'Grzybiarz', 'MINOR', 'siemanosiemano')").execute();
+        dbManager.getConnection().prepareStatement("INSERT INTO Decisions(component, added_on, user_name, importance, description) VALUES ('cipy', parsedatetime('2022-12-12','yyyy-MM-dd'), 'Janush', 'MAJOR', 'dzwonipapagei')").execute();
+        dbManager.getConnection().prepareStatement("INSERT INTO Decisions(component, added_on, user_name, importance, description) VALUES ('japy', parsedatetime('2022-12-12','yyyy-MM-dd'), 'Elo', 'CRITICAL', 'SIEMA ENIU')").execute();
         DecisionService decisionService = new DecisionService(dbManager);
         List<Decision> result = decisionService.getAll();
 
@@ -57,10 +54,9 @@ public class DecisionServiceTest {
 
     @Test
     public void testFilter() throws SQLException, ParseException {
-        dbManager.getConnection().prepareStatement("INSERT INTO Decisions(id, component, added_on, user_name, importance, description) VALUES (1, 'dupy', parsedatetime('2022-12-12','yyyy-MM-dd'), 'Grzybiarz', 'MINOR', 'siemanosiemano')").execute();
-        dbManager.getConnection().prepareStatement("INSERT INTO Decisions(id, component, added_on, user_name, importance, description) VALUES (2, 'cipy', parsedatetime('2022-12-12','yyyy-MM-dd'), 'Janush', 'MAJOR', 'dzwonipapagei')").execute();
-        dbManager.getConnection().prepareStatement("INSERT INTO Decisions(id, component, added_on, user_name, importance, description) VALUES (3, 'japy', parsedatetime('2022-12-12','yyyy-MM-dd'), 'Elo', 'CRITICAL', 'SIEMA ENIU')").execute();
-
+        dbManager.getConnection().prepareStatement("INSERT INTO Decisions(component, added_on, user_name, importance, description) VALUES ('dupy', parsedatetime('2022-12-12','yyyy-MM-dd'), 'Grzybiarz', 'MINOR', 'siemanosiemano')").execute();
+        dbManager.getConnection().prepareStatement("INSERT INTO Decisions(component, added_on, user_name, importance, description) VALUES ('cipy', parsedatetime('2022-12-12','yyyy-MM-dd'), 'Janush', 'MAJOR', 'dzwonipapagei')").execute();
+        dbManager.getConnection().prepareStatement("INSERT INTO Decisions(component, added_on, user_name, importance, description) VALUES ('japy', parsedatetime('2022-12-12','yyyy-MM-dd'), 'Elo', 'CRITICAL', 'SIEMA ENIU')").execute();
         DecisionService decisionService = new DecisionService(dbManager);
         List<Decision> result = decisionService.filter("COMPONENT", "japy");
         assertEquals(1, result.size());
@@ -69,7 +65,6 @@ public class DecisionServiceTest {
     @Test
     public void testAdd() throws SQLException {
         Decision decision = new Decision();
-        decision.setId(2);
         decision.setImportance(Importance.CRITICAL);
         decision.setDescription("siema");
         decision.setPerson("123");
@@ -79,7 +74,7 @@ public class DecisionServiceTest {
         DecisionService decisionService = new DecisionService(dbManager);
         decisionService.add(decision);
 
-        String query = "SELECT * FROM Decisions WHERE id=2";
+        String query = "SELECT * FROM Decisions WHERE id=1";
         ResultSet resultSet = dbManager.getConnection().prepareStatement(query).executeQuery();
         assertTrue(resultSet.next());
     }

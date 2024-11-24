@@ -1,16 +1,15 @@
 package org.lukas.decision.service;
 
 import org.lukas.decision.model.Decision;
-import org.lukas.decision.model.Importance;
 import org.lukas.server.db.DbManager;
 
 import java.sql.*;
 import java.sql.Date;
-import java.text.ParseException;
 import java.util.*;
 
 public class DecisionService {
     // TODO: Write a client
+    // TODO: Db constraints (unique auto id, enum importance)
     // TODO (Optional): Add enum in db for the Importance field
 
     DbManager dbManager;
@@ -98,15 +97,14 @@ public class DecisionService {
     public void add(Decision decision) {
         Connection conn = dbManager.getConnection();
         try {
-            String query = "INSERT INTO Decisions(id, component, added_on, user_name, importance, description) " +
-                    "VALUES ((?), (?), (?), (?), (?), (?))";
+            String query = "INSERT INTO Decisions(component, added_on, user_name, importance, description) " +
+                    "VALUES ((?), (?), (?), (?), (?))";
             PreparedStatement statement = conn.prepareStatement(query);
-            statement.setInt(1, decision.getId());
-            statement.setString(2, decision.getComponent());
-            statement.setDate(3, new Date(decision.getDate().getTime()));
-            statement.setString(4, decision.getPerson());
-            statement.setString(5, decision.getImportance().name());
-            statement.setString(6, decision.getDescription());
+            statement.setString(1, decision.getComponent());
+            statement.setDate(2, new Date(decision.getDate().getTime()));
+            statement.setString(3, decision.getPerson());
+            statement.setString(4, decision.getImportance().name());
+            statement.setString(5, decision.getDescription());
             statement.execute();
         } catch (SQLException e) {
             throw new RuntimeException(e);
