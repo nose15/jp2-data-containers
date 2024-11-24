@@ -24,7 +24,7 @@ public class DbManagerTest {
     public void testTruncation() {
         try {
             DbManager dbManager = new DbManager(true);
-            PreparedStatement preparedStatement = dbManager.getConnection().prepareStatement("INSERT INTO Decisions(id, component, added_on, user_id, importance, description) VALUES (1, 'dupy', parsedatetime('2022-12-12','yyyy-MM-dd'), 1, 'MINOR', 'SIEMA ENIU')");
+            PreparedStatement preparedStatement = dbManager.getConnection().prepareStatement("INSERT INTO Decisions(id, component, added_on, user_name, importance, description) VALUES (1, 'dupy', parsedatetime('2022-12-12','yyyy-MM-dd'), 'Grzybiarz', 'MINOR', 'SIEMA ENIU')");
             preparedStatement.execute();
 
             PreparedStatement query = dbManager.getConnection().prepareStatement("SELECT * FROM Decisions");

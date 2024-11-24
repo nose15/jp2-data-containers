@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Optional;
 
 public class DecisionService {
-    // TODO: Remove userId in favor of just name - it'd be too much; no time for that
     // TODO: Write a client
     // TODO (Optional): Add enum in db for the Importance field
 
@@ -92,13 +91,13 @@ public class DecisionService {
     public void add(Decision decision) {
         Connection conn = dbManager.getConnection();
         try {
-            String query = "INSERT INTO Decisions(id, component, added_on, user_id, importance, description) " +
+            String query = "INSERT INTO Decisions(id, component, added_on, user_name, importance, description) " +
                     "VALUES ((?), (?), (?), (?), (?), (?))";
             PreparedStatement statement = conn.prepareStatement(query);
             statement.setInt(1, decision.getId());
             statement.setString(2, decision.getComponent());
             statement.setDate(3, new Date(decision.getDate().getTime()));
-            statement.setInt(4, Integer.parseInt(decision.getPerson()));
+            statement.setString(4, decision.getPerson());
             statement.setString(5, decision.getImportance().name());
             statement.setString(6, decision.getDescription());
             statement.execute();
@@ -113,7 +112,7 @@ public class DecisionService {
         decision.setComponent(set.getString("component"));
         decision.setDate(set.getDate("added_on"));
         decision.setDescription(set.getString("description"));
-        decision.setPerson(set.getString("user_id"));
+        decision.setPerson(set.getString("user_name"));
         decision.setImportance(Importance.valueOf(set.getString("importance")));
 
         return decision;

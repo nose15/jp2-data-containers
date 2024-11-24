@@ -32,7 +32,8 @@ public class DbManager {
 
     public void truncateTables() {
         try {
-            PreparedStatement statement = this.connection.prepareStatement("SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = SCHEMA()");
+            String query = "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = SCHEMA()";
+            PreparedStatement statement = this.connection.prepareStatement(query);
             ResultSet resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
@@ -47,14 +48,23 @@ public class DbManager {
 
     private void initialize() {
         try {
-            PreparedStatement statement = this.connection.prepareStatement("SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = SCHEMA()");
+            String query = "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = SCHEMA()";
+            PreparedStatement statement = this.connection.prepareStatement(query);
             ResultSet resultSet = statement.executeQuery();
 
             if (resultSet.next()) {
                 return;
             }
 
-            PreparedStatement initialization = this.connection.prepareStatement("CREATE TABLE Decisions(id int, component varchar(255), added_on date, description varchar(255), user_id int, importance varchar(255))");
+            String initQuery = "CREATE TABLE Decisions(" +
+                    "id int, " +
+                    "component varchar(255), " +
+                    "added_on date, " +
+                    "description varchar(511), " +
+                    "user_name varchar(255), " +
+                    "importance varchar(255))";
+
+            PreparedStatement initialization = this.connection.prepareStatement(initQuery);
             initialization.execute();
         } catch (SQLException e) {
             throw new RuntimeException(e);
