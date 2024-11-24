@@ -8,10 +8,6 @@ import java.sql.Date;
 import java.util.*;
 
 public class DecisionService {
-    // TODO: Write a client
-    // TODO: Db constraints (unique auto id, enum importance)
-    // TODO (Optional): Add enum in db for the Importance field
-
     DbManager dbManager;
 
     public DecisionService() {
