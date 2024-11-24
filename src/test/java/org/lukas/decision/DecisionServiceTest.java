@@ -11,6 +11,7 @@ import org.lukas.server.db.DbManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -55,7 +56,7 @@ public class DecisionServiceTest {
     }
 
     @Test
-    public void testFilter() throws SQLException {
+    public void testFilter() throws SQLException, ParseException {
         dbManager.getConnection().prepareStatement("INSERT INTO Decisions(id, component, added_on, user_name, importance, description) VALUES (1, 'dupy', parsedatetime('2022-12-12','yyyy-MM-dd'), 'Grzybiarz', 'MINOR', 'siemanosiemano')").execute();
         dbManager.getConnection().prepareStatement("INSERT INTO Decisions(id, component, added_on, user_name, importance, description) VALUES (2, 'cipy', parsedatetime('2022-12-12','yyyy-MM-dd'), 'Janush', 'MAJOR', 'dzwonipapagei')").execute();
         dbManager.getConnection().prepareStatement("INSERT INTO Decisions(id, component, added_on, user_name, importance, description) VALUES (3, 'japy', parsedatetime('2022-12-12','yyyy-MM-dd'), 'Elo', 'CRITICAL', 'SIEMA ENIU')").execute();

@@ -23,13 +23,15 @@ public class FindHandler implements Handler {
     public Optional<Message> handle(Message message) {
         try {
             JSONObject query = parseQuery(message.getContent());
-            List<Decision> decisions = decisionService.filter(query.getString("field"), query.get("value"));
+            List<Decision> decisions = decisionService.filter(query.getString("field"), query.getString("value"));
             JSONArray decisionsJson = DecisionJsonEncoder.encodeDecisions(decisions);
             return Optional.of(new Message(MessageType.OK, decisionsJson.toString()));
         } catch (JSONException e) {
             return Optional.of(new Message(MessageType.ERROR, "Wrong JSON format: " + e.getMessage()));
         } catch (ParseException e) {
             return Optional.of(new Message(MessageType.ERROR, "Wrong data format: " + e.getMessage()));
+        } catch (IllegalArgumentException e) {
+            return Optional.of(new Message(MessageType.ERROR, "Bad request: " + e.getMessage()));
         }
     }
 

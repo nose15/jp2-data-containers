@@ -5,10 +5,9 @@ import org.lukas.decision.model.Importance;
 import org.lukas.server.db.DbManager;
 
 import java.sql.*;
-import java.text.DateFormat;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.sql.Date;
+import java.text.ParseException;
+import java.util.*;
 
 public class DecisionService {
     // TODO: Write a client
@@ -40,7 +39,7 @@ public class DecisionService {
                 return Optional.empty();
             }
 
-            Decision decision = decisionFromQueryRes(result);
+            Decision decision = Decision.fromQueryRes(result);
             return Optional.of(decision);
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -57,7 +56,7 @@ public class DecisionService {
 
             List<Decision> decisions = new ArrayList<>();
             while (results.next()) {
-                Decision decision = decisionFromQueryRes(results);
+                Decision decision = Decision.fromQueryRes(results);
                 decisions.add(decision);
             }
 
@@ -68,17 +67,25 @@ public class DecisionService {
 
     }
 
-    public List<Decision> filter(String field, Object keyword) {
+    public List<Decision> filter(String column, String keyword) {
         Connection conn = dbManager.getConnection();
         try {
-            String query = "SELECT * FROM Decisions WHERE " + field + " = (?)";
+            if (!dbManager.columnExists(column)) {
+                throw new IllegalArgumentException("No such column: " + column);
+            }
+
+            if (!dbManager.getColumnDatatype(column).equals("CHARACTER VARYING")) {
+                throw new IllegalArgumentException("Only string columns can be searched against");
+            }
+
+            String query = "SELECT * FROM Decisions WHERE " + column + " = (?)";
             PreparedStatement statement = conn.prepareStatement(query);
-            statement.setString(1, (String) keyword);
+            statement.setString(1, keyword);
             ResultSet results = statement.executeQuery();
             List<Decision> decisions = new ArrayList<>();
 
             while (results.next()) {
-                Decision decision = decisionFromQueryRes(results);
+                Decision decision = Decision.fromQueryRes(results);
                 decisions.add(decision);
             }
 
@@ -104,17 +111,5 @@ public class DecisionService {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    private Decision decisionFromQueryRes(ResultSet set) throws SQLException {
-        Decision decision = new Decision();
-        decision.setId(set.getInt("id"));
-        decision.setComponent(set.getString("component"));
-        decision.setDate(set.getDate("added_on"));
-        decision.setDescription(set.getString("description"));
-        decision.setPerson(set.getString("user_name"));
-        decision.setImportance(Importance.valueOf(set.getString("importance")));
-
-        return decision;
     }
 }

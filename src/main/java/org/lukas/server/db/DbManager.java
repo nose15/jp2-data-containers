@@ -1,6 +1,8 @@
 package org.lukas.server.db;
 
 import java.sql.*;
+import java.util.HashSet;
+import java.util.Set;
 
 public class DbManager {
     private final String jdbcUrl = "jdbc:h2:./data/proddb";
@@ -45,6 +47,35 @@ public class DbManager {
             throw new RuntimeException(e);
         }
     }
+
+    public boolean columnExists(String colName) throws SQLException {
+        String query = "SHOW columns FROM Decisions";
+        PreparedStatement preparedStatement = this.connection.prepareStatement(query);
+        ResultSet resultSet = preparedStatement.executeQuery();
+
+        Set<String> tableNames = new HashSet<>();
+        while (resultSet.next()) {
+            tableNames.add(resultSet.getString(1));
+        }
+
+        return tableNames.contains(colName.toUpperCase());
+    }
+
+    public String getColumnDatatype(String colName) throws SQLException {
+        String query = "SELECT DATA_TYPE " +
+                "FROM INFORMATION_SCHEMA.COLUMNS " +
+                "WHERE TABLE_NAME='DECISIONS' AND COLUMN_NAME=(?);";
+        PreparedStatement preparedStatement = this.connection.prepareStatement(query);
+        preparedStatement.setString(1, colName);
+        ResultSet resultSet = preparedStatement.executeQuery();
+
+        if (resultSet.next()) {
+            return resultSet.getString(1);
+        }
+
+        throw new SQLException("No such column");
+    }
+
 
     private void initialize() {
         try {
