@@ -107,7 +107,7 @@ public class DecisionService {
     public void add(Decision decision) {
         Connection conn = dbManager.getConnection();
         try {
-            String query = "INSERT INTO Decisions(component, added_on, user_name, importance, description) " +
+            String query = "INSERT INTO Decisions(component, added_on, person, importance, description) " +
                     "VALUES ((?), (?), (?), (?), (?))";
             PreparedStatement statement = conn.prepareStatement(query);
             statement.setString(1, decision.getComponent());

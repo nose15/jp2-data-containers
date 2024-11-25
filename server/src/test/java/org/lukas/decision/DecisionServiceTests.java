@@ -30,7 +30,7 @@ public class DecisionServiceTests {
 
     @Test
     public void testGetById() throws SQLException {
-        PreparedStatement preparedStatement = dbManager.getConnection().prepareStatement("INSERT INTO Decisions(component, added_on, user_name, importance, description) VALUES ('dupy', parsedatetime('2022-12-12','yyyy-MM-dd'), 'Grzybiarz', 'MINOR', 'siemanosiemano')");
+        PreparedStatement preparedStatement = dbManager.getConnection().prepareStatement("INSERT INTO Decisions(component, added_on, person, importance, description) VALUES ('dupy', parsedatetime('2022-12-12','yyyy-MM-dd'), 'Grzybiarz', 'MINOR', 'siemanosiemano')");
         preparedStatement.execute();
         DecisionService decisionService = new DecisionService(dbManager);
         Optional<Decision> decision = decisionService.getById(1);
@@ -40,9 +40,9 @@ public class DecisionServiceTests {
 
     @Test
     public void testGetAll() throws SQLException {
-        dbManager.getConnection().prepareStatement("INSERT INTO Decisions(component, added_on, user_name, importance, description) VALUES ('dupy', parsedatetime('2022-12-12','yyyy-MM-dd'), 'Grzybiarz', 'MINOR', 'siemanosiemano')").execute();
-        dbManager.getConnection().prepareStatement("INSERT INTO Decisions(component, added_on, user_name, importance, description) VALUES ('cipy', parsedatetime('2022-12-12','yyyy-MM-dd'), 'Janush', 'MAJOR', 'dzwonipapagei')").execute();
-        dbManager.getConnection().prepareStatement("INSERT INTO Decisions(component, added_on, user_name, importance, description) VALUES ('japy', parsedatetime('2022-12-12','yyyy-MM-dd'), 'Elo', 'CRITICAL', 'SIEMA ENIU')").execute();
+        dbManager.getConnection().prepareStatement("INSERT INTO Decisions(component, added_on, person, importance, description) VALUES ('dupy', parsedatetime('2022-12-12','yyyy-MM-dd'), 'Grzybiarz', 'MINOR', 'siemanosiemano')").execute();
+        dbManager.getConnection().prepareStatement("INSERT INTO Decisions(component, added_on, person, importance, description) VALUES ('cipy', parsedatetime('2022-12-12','yyyy-MM-dd'), 'Janush', 'MAJOR', 'dzwonipapagei')").execute();
+        dbManager.getConnection().prepareStatement("INSERT INTO Decisions(component, added_on, person, importance, description) VALUES ('japy', parsedatetime('2022-12-12','yyyy-MM-dd'), 'Elo', 'CRITICAL', 'SIEMA ENIU')").execute();
         DecisionService decisionService = new DecisionService(dbManager);
         List<Decision> result = decisionService.getAll();
 
@@ -51,9 +51,9 @@ public class DecisionServiceTests {
 
     @Test
     public void testFilter() throws SQLException, ParseException {
-        dbManager.getConnection().prepareStatement("INSERT INTO Decisions(component, added_on, user_name, importance, description) VALUES ('dupy', parsedatetime('2022-12-12','yyyy-MM-dd'), 'Grzybiarz', 'MINOR', 'siemanosiemano')").execute();
-        dbManager.getConnection().prepareStatement("INSERT INTO Decisions(component, added_on, user_name, importance, description) VALUES ('cipy', parsedatetime('2022-12-12','yyyy-MM-dd'), 'Janush', 'MAJOR', 'dzwonipapagei')").execute();
-        dbManager.getConnection().prepareStatement("INSERT INTO Decisions(component, added_on, user_name, importance, description) VALUES ('japy', parsedatetime('2022-12-12','yyyy-MM-dd'), 'Elo', 'CRITICAL', 'SIEMA ENIU')").execute();
+        dbManager.getConnection().prepareStatement("INSERT INTO Decisions(component, added_on, person, importance, description) VALUES ('dupy', parsedatetime('2022-12-12','yyyy-MM-dd'), 'Grzybiarz', 'MINOR', 'siemanosiemano')").execute();
+        dbManager.getConnection().prepareStatement("INSERT INTO Decisions(component, added_on, person, importance, description) VALUES ('cipy', parsedatetime('2022-12-12','yyyy-MM-dd'), 'Janush', 'MAJOR', 'dzwonipapagei')").execute();
+        dbManager.getConnection().prepareStatement("INSERT INTO Decisions(component, added_on, person, importance, description) VALUES ('japy', parsedatetime('2022-12-12','yyyy-MM-dd'), 'Elo', 'CRITICAL', 'SIEMA ENIU')").execute();
         DecisionService decisionService = new DecisionService(dbManager);
         Map<String, String> querries = new HashMap<>();
         querries.put("component", "dupy");

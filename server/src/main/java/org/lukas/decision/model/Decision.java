@@ -52,7 +52,7 @@ public class Decision {
         decision.setComponent(set.getString("component"));
         decision.setDate(set.getDate("added_on"));
         decision.setDescription(set.getString("description"));
-        decision.setPerson(set.getString("user_name"));
+        decision.setPerson(set.getString("person"));
         decision.setImportance(Importance.valueOf(set.getString("importance")));
 
         return decision;

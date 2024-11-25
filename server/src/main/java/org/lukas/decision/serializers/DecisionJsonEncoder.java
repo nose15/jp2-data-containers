@@ -20,8 +20,9 @@ public class DecisionJsonEncoder {
     public static JSONObject encodeDecision(Decision decision) {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("id", decision.getId());
-        jsonObject.put("personId", decision.getPerson());
+        jsonObject.put("person", decision.getPerson());
         jsonObject.put("date", decision.getDate());
+        jsonObject.put("component", decision.getComponent());
         jsonObject.put("importance", decision.getImportance().name());
         jsonObject.put("description", decision.getDescription());
 

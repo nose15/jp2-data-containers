@@ -54,7 +54,6 @@ public class Server {
                 } else if (key.isReadable()) {
                     SocketChannel clientChannel = (SocketChannel) key.channel();
                     try {
-
                         processMessage(clientChannel, buffer);
                     } catch (SocketException e) {
                         if (clientChannel.isOpen()) {
@@ -62,6 +61,8 @@ public class Server {
                         } else {
                             System.out.println("Suddenly closed connection");
                         }
+                    } catch (ClosedChannelException e) {
+                        System.out.println("Closed connection");
                     }
                 }
             }

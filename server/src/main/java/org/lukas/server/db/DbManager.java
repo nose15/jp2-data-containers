@@ -102,7 +102,7 @@ public class DbManager {
                     "component varchar(255), " +
                     "added_on date, " +
                     "description varchar(511), " +
-                    "user_name varchar(255), " +
+                    "person varchar(255), " +
                     "importance varchar(255))";
 
             PreparedStatement initialization = this.connection.prepareStatement(initQuery);
