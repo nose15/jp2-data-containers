@@ -6,6 +6,8 @@ import org.lukas.CommandType;
 import org.lukas.message.model.Message;
 import org.lukas.message.model.MessageType;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.BlockingQueue;
 import java.util.regex.Matcher;
@@ -22,15 +24,14 @@ public class UserInterface implements Runnable {
     public void run() {
         try (Scanner scanner = new Scanner(System.in)) {
             while (true) {
-                System.out.print("> ");
                 try {
+                    System.out.print("> ");
                     Command command = Command.fromString(scanner.nextLine());
                     handleCommand(command);
+                    Thread.sleep(200);
                 } catch (IllegalArgumentException e) {
                     System.out.println("Wrong command, use HELP");
                 }
-
-                Thread.sleep(20);
             }
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
@@ -62,7 +63,10 @@ public class UserInterface implements Runnable {
         }
 
         if (dateStr == "") {
-            jsonObject.put("date", new Date());
+            LocalDate currentDate = LocalDate.now();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+            String formattedDate = currentDate.format(formatter);
+            jsonObject.put("date", formattedDate);
         } else {
             jsonObject.put("date", dateStr);
         }
@@ -98,9 +102,9 @@ public class UserInterface implements Runnable {
             jsonObject.put("id", command.getArgs().get(0));
             Message message = new Message(MessageType.GET_ONE, jsonObject.toString());
             messages.put(message);
+        } else {
+            System.out.println("Invalid argument count, should be 0 or 1 (id)");
         }
-
-        System.out.println("Invalid argument count, should be 0 or 1 (id)");
     }
 
     private void validateAndSendSearch(Command command) throws InterruptedException {
