@@ -27,5 +27,5 @@ The uds_address property is an address of Unix Domain Socket at which the server
 If you want to open a simple test client for the server, make sure that you've done
 all the steps above, and then run:
 ```
-java -cp uds-helloworld-1.0-SNAPSHOT.jar org.lukas.Client
+java -cp uds-helloworld-1.0-SNAPSHOT.jar org.lukas.Main
 ```

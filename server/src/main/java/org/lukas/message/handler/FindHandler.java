@@ -11,7 +11,9 @@ import org.lukas.message.model.Message;
 import org.lukas.message.model.MessageType;
 
 import java.text.ParseException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -22,8 +24,8 @@ public class FindHandler implements Handler {
     @Override
     public Optional<Message> handle(Message message) {
         try {
-            JSONObject query = parseQuery(message.getContent());
-            List<Decision> decisions = decisionService.filter(query.getString("field"), query.getString("value"));
+            Map<String, String> queries = parseQueries(message.getContent());
+            List<Decision> decisions = decisionService.filter(queries);
             JSONArray decisionsJson = DecisionJsonEncoder.encodeDecisions(decisions);
             return Optional.of(new Message(MessageType.OK, decisionsJson.toString()));
         } catch (JSONException e) {
@@ -35,26 +37,30 @@ public class FindHandler implements Handler {
         }
     }
 
-    private JSONObject parseQuery(String content) throws ParseException {
+    private Map<String, String> parseQueries(String content) throws ParseException {
         Pattern fieldPattern = Pattern.compile("^[a-z]*$");
         Pattern keywordPattern = Pattern.compile("^[a-zA-Z0-9 ]*$");
 
         JSONObject json = new JSONObject(content);
-        String field = json.getString("field");
-        String keyword = json.getString("keyword");
+        Map<String, String> queries = new HashMap<>();
 
-        Matcher fieldMatcher = fieldPattern.matcher(field);
-        Matcher keywordMatcher = keywordPattern.matcher(keyword);
+        for (Object n : json.names()) {
+            String name = (String) n;
+            Matcher fieldMatcher = fieldPattern.matcher(name);
+            Matcher keywordMatcher = keywordPattern.matcher(json.getString(name));
 
+            if (!fieldMatcher.matches()) {
+                throw new ParseException("Field should only contain letters a-z", 0);
+            }
 
-        if (!fieldMatcher.matches()) {
-            throw new ParseException("Field should only contain letters a-z", 0);
+            if (!keywordMatcher.matches()) {
+                throw new ParseException("Keyword should only contain letters a-Z and numbers 0-9", 0);
+            }
+
+            queries.put(name, json.getString(name));
         }
 
-        if (!keywordMatcher.matches()) {
-            throw new ParseException("Keyword should only contain letters a-Z and numbers 0-9", 0);
-        }
-
-        return json;
+        System.out.println(queries);
+        return queries;
     }
 }

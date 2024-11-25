@@ -76,7 +76,7 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>lib/</classpathPrefix>
-                            <mainClass>org.lukas.</mainClass>
+                            <mainClass>org.lukas.server.Main</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

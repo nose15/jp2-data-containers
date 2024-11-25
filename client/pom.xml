@@ -37,6 +37,12 @@
             <artifactId>json</artifactId>
             <version>20240303</version>
         </dependency>
+        <dependency>
+            <groupId>org.lukas</groupId>
+            <artifactId>jp2-server</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -71,7 +77,7 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>lib/</classpathPrefix>
-                            <mainClass>org.lukas.Client</mainClass>
+                            <mainClass>org.lukas.Main</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

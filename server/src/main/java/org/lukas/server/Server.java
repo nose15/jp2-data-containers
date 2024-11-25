@@ -60,7 +60,7 @@ public class Server {
                         if (clientChannel.isOpen()) {
                             clientChannel.close();
                         } else {
-                            System.out.println("Suddenly closed connection with " + clientChannel.getLocalAddress());
+                            System.out.println("Suddenly closed connection");
                         }
                     }
                 }
@@ -80,6 +80,7 @@ public class Server {
         }
 
         Message message = MessageParser.decode(buffer);
+        System.out.println(message);
         buffer.clear();
 
         Optional<Message> response = router.dispatch(message);

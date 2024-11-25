@@ -35,28 +35,8 @@ public class Main {
 
 
     private static Path parseSocketPath(String[] args) {
-        Options options = new Options();
-        options.addOption("s", "socket", true, "siema");
-
-        CommandLineParser commandLineParser = new DefaultParser();
-        CommandLine cmd = null;
-
-        try {
-            cmd = commandLineParser.parse(options, args);
-        } catch (ParseException e) {
-            System.out.println("Error while parsing arguments: " + e);
-            System.exit(1);
-        }
-
-        Path socketPath = null;
-
-        if (cmd.hasOption("s")) {
-            socketPath = Path.of(cmd.getOptionValue("s"));
-        } else {
-            System.out.println("UDS address must be specified using -s (--socket)");
-            System.exit(1);
-        }
-
-        return socketPath;
+        return Path
+                .of(System.getProperty("user.home"))
+                .resolve("hello.socket");
     }
 }

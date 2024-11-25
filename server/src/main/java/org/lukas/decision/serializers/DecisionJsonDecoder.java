@@ -18,7 +18,7 @@ public class DecisionJsonDecoder {
     }
 
     public static String parseComponent(JSONObject decisionJson) throws ParseException {
-        String componentStr = decisionJson.getString("componentStr");
+        String componentStr = decisionJson.getString("component");
         componentStr = componentStr.trim();
         componentStr = componentStr.strip();
         Pattern pattern = Pattern.compile("^[a-zA-Z0-9 ]*$");
@@ -47,11 +47,14 @@ public class DecisionJsonDecoder {
 
     public static Importance parseImportance(JSONObject decisionJson) throws ParseException {
         String importanceStr = decisionJson.getString("importance");
-        importanceStr = importanceStr.toLowerCase(Locale.ROOT);
         importanceStr = importanceStr.trim();
         importanceStr = importanceStr.strip();
 
-        return Importance.fromString(importanceStr);
+        try {
+            return Importance.valueOf(importanceStr.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new ParseException(e.getMessage(), 0);
+        }
     }
 
     public static String parseDescription(JSONObject decisionJson) throws ParseException {

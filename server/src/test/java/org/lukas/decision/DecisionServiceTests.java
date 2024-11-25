@@ -11,9 +11,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -57,7 +55,10 @@ public class DecisionServiceTests {
         dbManager.getConnection().prepareStatement("INSERT INTO Decisions(component, added_on, user_name, importance, description) VALUES ('cipy', parsedatetime('2022-12-12','yyyy-MM-dd'), 'Janush', 'MAJOR', 'dzwonipapagei')").execute();
         dbManager.getConnection().prepareStatement("INSERT INTO Decisions(component, added_on, user_name, importance, description) VALUES ('japy', parsedatetime('2022-12-12','yyyy-MM-dd'), 'Elo', 'CRITICAL', 'SIEMA ENIU')").execute();
         DecisionService decisionService = new DecisionService(dbManager);
-        List<Decision> result = decisionService.filter("COMPONENT", "japy");
+        Map<String, String> querries = new HashMap<>();
+        querries.put("component", "dupy");
+
+        List<Decision> result = decisionService.filter(querries);
         assertEquals(1, result.size());
     }
 

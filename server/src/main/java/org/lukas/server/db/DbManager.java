@@ -76,7 +76,7 @@ public class DbManager {
                 "FROM INFORMATION_SCHEMA.COLUMNS " +
                 "WHERE TABLE_NAME='DECISIONS' AND COLUMN_NAME=(?);";
         PreparedStatement preparedStatement = this.connection.prepareStatement(query);
-        preparedStatement.setString(1, colName);
+        preparedStatement.setString(1, colName.toUpperCase());
         ResultSet resultSet = preparedStatement.executeQuery();
 
         if (resultSet.next()) {

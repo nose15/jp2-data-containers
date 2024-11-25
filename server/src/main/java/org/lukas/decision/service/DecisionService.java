@@ -62,22 +62,36 @@ public class DecisionService {
 
     }
 
-    public List<Decision> filter(String column, String keyword) {
+    public List<Decision> filter(Map<String, String> queries) {
         Connection conn = dbManager.getConnection();
         try {
-            if (!dbManager.columnExists(column)) {
-                throw new IllegalArgumentException("No such column: " + column);
-            }
-
-            if (!dbManager.getColumnDatatype(column).equals("CHARACTER VARYING")) {
-                throw new IllegalArgumentException("Only string columns can be searched against");
-            }
-
-            String query = "SELECT * FROM Decisions WHERE " + column + " = (?)";
-            PreparedStatement statement = conn.prepareStatement(query);
-            statement.setString(1, keyword);
-            ResultSet results = statement.executeQuery();
             List<Decision> decisions = new ArrayList<>();
+
+            StringBuilder query = new StringBuilder("SELECT * FROM Decisions WHERE ");
+
+            for (var entry : queries.keySet()) {
+                System.out.println(entry + " " + queries.get(entry));
+
+                if (!dbManager.columnExists(entry)) {
+                    throw new IllegalArgumentException("No such column: " + entry);
+                }
+
+                if (!dbManager.getColumnDatatype(entry).equals("CHARACTER VARYING")) {
+                    throw new IllegalArgumentException("Only string columns can be searched against");
+                }
+
+                query.append(entry).append(" LIKE (?) AND ");
+            }
+
+            PreparedStatement statement = conn.prepareStatement(query.substring(0, query.length() - 5));
+
+            int index = 1;
+            for (var entry : queries.keySet()) {
+                statement.setString(index, queries.get(entry));
+                index++;
+            }
+
+            ResultSet results = statement.executeQuery();
 
             while (results.next()) {
                 Decision decision = Decision.fromQueryRes(results);
