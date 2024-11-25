@@ -1,8 +1,8 @@
-package org.lukas.client;
+package org.lukas;
 
-import org.lukas.server.message.MessageParser;
-import org.lukas.server.message.Message;
-import org.lukas.server.message.MessageType;
+import org.lukas.message.Message;
+import org.lukas.message.MessageType;
+import org.lukas.serializers.MessageParser;
 
 import java.io.IOException;
 import java.net.StandardProtocolFamily;
@@ -56,7 +56,7 @@ public class Client {
                 }
 
                 if (key.isWritable()) {
-                    Message message = new Message(MessageType.PING, "ding");
+                    Message message = new Message(MessageType.OK, "ding");
                     buffer.put(MessageParser.encode(message));
                     buffer.flip();
                     channel.write(buffer);

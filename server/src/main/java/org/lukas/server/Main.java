@@ -1,19 +1,16 @@
-package org.lukas;
+package org.lukas.server;
 
 import org.apache.commons.cli.*;
-import org.lukas.server.Server;
 import org.lukas.message.handler.AddHandler;
 import org.lukas.message.handler.FindHandler;
 import org.lukas.message.handler.GetAllHandler;
 import org.lukas.message.handler.GetOneHandler;
 import org.lukas.message.model.MessageType;
-import org.lukas.server.db.DbManager;
 import org.lukas.server.router.Router;
 import org.lukas.message.router.MessageTypeRouter;
 
 import java.io.IOException;
 import java.nio.file.Path;
-import java.sql.SQLException;
 
 public class Main {
     public static void main(String[] args) throws IOException, InterruptedException {
@@ -63,5 +60,3 @@ public class Main {
         return socketPath;
     }
 }
-
-

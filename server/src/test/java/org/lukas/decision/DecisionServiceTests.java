@@ -1,6 +1,5 @@
 package org.lukas.decision;
 
-import org.jooq.SQL;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.lukas.decision.model.Decision;
@@ -18,10 +17,10 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class DecisionServiceTest {
+public class DecisionServiceTests {
     private final DbManager dbManager;
 
-    public DecisionServiceTest() throws SQLException {
+    public DecisionServiceTests() throws SQLException {
         this.dbManager = new DbManager(true);
     }
 
