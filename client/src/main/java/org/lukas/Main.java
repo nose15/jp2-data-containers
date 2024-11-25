@@ -2,7 +2,7 @@ package org.lukas;
 
 import org.lukas.client.Client;
 import org.lukas.message.model.Message;
-import org.lukas.ui.UserInterface;
+import org.lukas.ui.InputManager;
 
 import java.io.IOException;
 import java.util.concurrent.BlockingQueue;
@@ -13,10 +13,10 @@ public class Main {
             throws IOException, InterruptedException {
         BlockingQueue<Message> messagesToSend = new LinkedBlockingQueue<>(2);
 
-        UserInterface userInterface = new UserInterface(messagesToSend);
+        InputManager inputManager = new InputManager(messagesToSend);
         Client client = new Client(messagesToSend);
 
-        Thread producerThread = new Thread(userInterface);
+        Thread producerThread = new Thread(inputManager);
         Thread consumerThread = new Thread(client);
         producerThread.start();
         consumerThread.start();

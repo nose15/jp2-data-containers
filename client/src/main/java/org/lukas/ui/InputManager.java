@@ -2,7 +2,6 @@ package org.lukas.ui;
 
 import org.json.JSONObject;
 import org.lukas.Command;
-import org.lukas.CommandType;
 import org.lukas.message.model.Message;
 import org.lukas.message.model.MessageType;
 
@@ -13,10 +12,10 @@ import java.util.concurrent.BlockingQueue;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class UserInterface implements Runnable {
+public class InputManager implements Runnable {
     private final BlockingQueue<Message> messages;
 
-    public UserInterface(BlockingQueue<Message> messages) {
+    public InputManager(BlockingQueue<Message> messages) {
         this.messages = messages;
     }
 
@@ -40,14 +39,15 @@ public class UserInterface implements Runnable {
 
     private void handleCommand(Command command) throws InterruptedException {
         switch (command.getKeyword()) {
-            case ADD -> addingProcedure(command);
+            case ADD -> addingForm(command);
             case GET -> validateAndSendGet(command);
             case SEARCH -> validateAndSendSearch(command);
-//            case HELP -> ;
+            case HELP -> showHelp();
+            case EXIT -> System.exit(1);
         }
     }
 
-    private void addingProcedure(Command command) throws InterruptedException {
+    private void addingForm(Command command) throws InterruptedException {
         JSONObject jsonObject = new JSONObject();
         Scanner scanner = new Scanner(System.in);
         System.out.print("component <str>: ");
@@ -122,6 +122,15 @@ public class UserInterface implements Runnable {
         }
 
         messages.put(new Message(MessageType.FIND, jsonObject.toString()));
+    }
+
+    private void showHelp() {
+        System.out.println("HELP:");
+        System.out.println("    - GET - fetch all decisions");
+        System.out.println("    - GET <id> - fetch one decision by id");
+        System.out.println("    - ADD - add decision");
+        System.out.println("    - SEARCH <column>=<keyword> <column2>=<keyword2> ... - Search for a decision that satisfies all conditions");
+        System.out.println("    - EXIT - shutdown application");
     }
 
     private boolean dateValid(String dateString) {
