@@ -1,6 +1,10 @@
 package org.lukas.client;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.lukas.decision.model.Importance;
 import org.lukas.message.model.Message;
+import org.lukas.message.model.MessageType;
 import org.lukas.message.serializers.MessageParser;
 
 import java.io.IOException;
@@ -12,7 +16,9 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
 import java.nio.file.Path;
+import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.BlockingQueue;
 
@@ -56,7 +62,11 @@ private final BlockingQueue<Message> messages;
                         int readBytes = channel.read(buffer);
                         if (readBytes > 0) {
                             Message read = MessageParser.decode(buffer);
-                            System.out.println(read.getMessageType() + ": " + read.getContent());
+                            if (read.getMessageType() == MessageType.OK) {
+                                displayMessage(read);
+                            } else {
+                                System.out.println(read.getMessageType() + ": " + read.getContent());
+                            }
                             buffer.clear();
                         }
                     }
@@ -81,5 +91,38 @@ private final BlockingQueue<Message> messages;
             throw new RuntimeException(e);
         }
 
+    }
+
+    private void displayMessage(Message message) {
+        if (message.getContentLength() == 0) {
+            return;
+        }
+        JSONObject content = new JSONObject(message.getContent());
+
+        if (content.isEmpty()) {
+            return;
+        }
+
+        String type = content.getString("type");
+
+        if (type.equals("single")) {
+            displaySingleDecision(content.getJSONObject("decision"));
+        } else if (type.equals("multiple")) {
+            JSONArray decisions = content.getJSONArray("decisions");
+
+            for (Object decision : decisions) {
+                JSONObject dec = (JSONObject) decision;
+                displaySingleDecision(dec);
+            }
+        }
+    }
+
+    private void displaySingleDecision(JSONObject decision) {
+        System.out.println("Decision " + decision.get("id") + ": ");
+        System.out.println("Component " + decision.get("component"));
+        System.out.println("Added on " + decision.get("date"));
+        System.out.println("Made by " + decision.get("person"));
+        System.out.println("Priority " + decision.get("importance"));
+        System.out.println("Description " + decision.get("description") + "\n");
     }
 }

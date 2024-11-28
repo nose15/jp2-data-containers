@@ -1,8 +1,7 @@
 package org.lukas.message.model;
 
-// TODO: Override toString
 public class Message {
-    static final int MAX_SIZE = Integer.MAX_VALUE; // TODO: Ogarnąć max size, bo nie da sie zrobic unsigned
+    static final int MAX_SIZE = Integer.MAX_VALUE;
 
     private MessageType messageType;
     private int contentLength;
