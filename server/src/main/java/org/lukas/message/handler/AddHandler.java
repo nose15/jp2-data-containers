@@ -23,6 +23,8 @@ public class AddHandler implements Handler {
             return Optional.of(new Message(MessageType.ERROR, "Wrong data format: " + e.getMessage()));
         } catch (JSONException e) {
             return Optional.of(new Message(MessageType.ERROR, "Wrong JSON format: " + e.getMessage()));
+        } catch (RuntimeException e) {
+            return Optional.of(new Message(MessageType.ERROR, "Wrong data"));
         }
     }
 }

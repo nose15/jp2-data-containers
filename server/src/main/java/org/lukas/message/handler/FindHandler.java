@@ -27,7 +27,10 @@ public class FindHandler implements Handler {
             Map<String, String> queries = parseQueries(message.getContent());
             List<Decision> decisions = decisionService.filter(queries);
             JSONArray decisionsJson = DecisionJsonEncoder.encodeDecisions(decisions);
-            return Optional.of(new Message(MessageType.OK, decisionsJson.toString()));
+            JSONObject responseBody = new JSONObject();
+            responseBody.put("type", "multiple");
+            responseBody.put("decisions", decisionsJson);
+            return Optional.of(new Message(MessageType.OK, responseBody.toString()));
         } catch (JSONException e) {
             return Optional.of(new Message(MessageType.ERROR, "Wrong JSON format: " + e.getMessage()));
         } catch (ParseException e) {

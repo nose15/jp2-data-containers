@@ -15,6 +15,10 @@ import java.util.regex.Pattern;
 public class InputManager implements Runnable {
     private final BlockingQueue<Message> messages;
 
+    // TODO: - test swear words
+    // TODO: - single decision display
+    // TODO: - multiple decision display
+
     public InputManager(BlockingQueue<Message> messages) {
         this.messages = messages;
     }
@@ -39,7 +43,7 @@ public class InputManager implements Runnable {
 
     private void handleCommand(Command command) throws InterruptedException {
         switch (command.getKeyword()) {
-            case ADD -> addingForm(command);
+            case ADD -> addingForm();
             case GET -> validateAndSendGet(command);
             case SEARCH -> validateAndSendSearch(command);
             case HELP -> showHelp();
@@ -47,7 +51,7 @@ public class InputManager implements Runnable {
         }
     }
 
-    private void addingForm(Command command) throws InterruptedException {
+    private void addingForm() throws InterruptedException {
         JSONObject jsonObject = new JSONObject();
         Scanner scanner = new Scanner(System.in);
         System.out.print("component <str>: ");

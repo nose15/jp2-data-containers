@@ -21,7 +21,10 @@ public class GetOneHandler implements Handler {
             Optional<Decision> decision = decisionService.getById(id);
             if (decision.isPresent()) {
                 JSONObject decisionJson = DecisionJsonEncoder.encodeDecision(decision.get());
-                return Optional.of(new Message(MessageType.OK, decisionJson.toString()));
+                JSONObject responseBody = new JSONObject();
+                responseBody.put("type", "single");
+                responseBody.put("decision", decisionJson);
+                return Optional.of(new Message(MessageType.OK, responseBody.toString()));
             } else {
                 return Optional.of(new Message(MessageType.ERROR, "Not found"));
             }

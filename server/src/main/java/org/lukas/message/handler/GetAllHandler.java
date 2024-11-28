@@ -1,6 +1,7 @@
 package org.lukas.message.handler;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 import org.lukas.decision.model.Decision;
 import org.lukas.decision.serializers.DecisionJsonEncoder;
 import org.lukas.decision.service.DecisionService;
@@ -17,7 +18,10 @@ public class GetAllHandler implements Handler {
     @Override
     public Optional<Message> handle(Message message) {
         List<Decision> decisions = decisionService.getAll();
+        JSONObject responseBody = new JSONObject();
         JSONArray decisionsJson = DecisionJsonEncoder.encodeDecisions(decisions);
-        return Optional.of(new Message(MessageType.OK, decisionsJson.toString()));
+        responseBody.put("type", "multiple");
+        responseBody.put("decisions", decisionsJson);
+        return Optional.of(new Message(MessageType.OK, responseBody.toString()));
     }
 }

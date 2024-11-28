@@ -1,7 +1,6 @@
 package org.lukas.client;
 
 import org.lukas.message.model.Message;
-import org.lukas.message.model.MessageType;
 import org.lukas.message.serializers.MessageParser;
 
 import java.io.IOException;
@@ -81,10 +80,6 @@ private final BlockingQueue<Message> messages;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
-    }
-
-    private void sendMessage(Message message) {
 
     }
 }

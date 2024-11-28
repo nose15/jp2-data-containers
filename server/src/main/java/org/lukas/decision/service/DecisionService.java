@@ -1,5 +1,6 @@
 package org.lukas.decision.service;
 
+import org.h2.jdbc.JdbcSQLDataException;
 import org.lukas.decision.model.Decision;
 import org.lukas.server.db.DbManager;
 
